@@ -4,6 +4,87 @@
   
   
   <entry>
+    <title>Lists I References Recursion and no Lists</title>
+    <link href="/2025/05/25/Lecture%203(no%20lists)/"/>
+    <url>/2025/05/25/Lecture%203(no%20lists)/</url>
+    
+    <content type="html"><![CDATA[<p>延用上次课的Dog类：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> &#123;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> weight;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Dog</span><span class="hljs-params">(<span class="hljs-type">int</span> w)</span>  <br>    &#123;  <br>        weight=w;  <br>    &#125;<br>    <br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;  <br>    <span class="hljs-type">Dog</span> <span class="hljs-variable">dog1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Dog</span>(<span class="hljs-number">1</span>);  <br>    <span class="hljs-type">Dog</span> <span class="hljs-variable">dog2</span> <span class="hljs-operator">=</span> dog1;  <br>    dog2.weight=<span class="hljs-number">100</span>;  <br>    System.out.println(dog1.weight);  <br>    System.out.println(dog2.weight);<br></code></pre></td></tr></table></figure><p>代码含义为，创建dog1并将体重设置成100，在创建dog2，并把dog1赋值给dog2，并将dog2的体重改为100，分别输出两只狗的体重。<br>运行后发现，两只狗的体重都变成了100，这是为什么？<br>原来，当我们设置一个新的dog1时，计算机会用一块内存来存储dog1的相应数据（比如weight的大小），但是计算机的内存是很大的，下次用的时候怎么知道他在哪呢？<br>我们用对象名dog1来存储其数据的位置，就像是埋宝藏，weight就是被埋的宝藏而dog1则是宝藏上的牌子，告诉我们weight在这里，能够快速找到。<br>那么dog2&#x3D;dog1，其实并没有新创建一只狗，dog2只是存储了dog1的位置，而改变dog2的体重，就是改变dog2位置的那只狗的体重，所以dog1，dog2的weight都变为100。<br><em>注意，只有引用类型有这个特征，像int、double这样的数据类型，重复上述操作就是重新创建了一个区域来存储数值，改变其中一个另一个不受影响。</em></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>-数据结构与算法 -CS61B</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cs</tag>
+      
+      <tag>java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Defining and Using Classes</title>
+    <link href="/2025/05/25/Lecture%202/"/>
+    <url>/2025/05/25/Lecture%202/</url>
+    
+    <content type="html"><![CDATA[<p>本节课主要讲了java中静态方法(static)和非静态方法(non-static)的区别，和相应的使用方式。<br>以类Dog为例：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> &#123; <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">makenoise</span><span class="hljs-params">()</span><br>    &#123;<br>     System.out.println(<span class="hljs-string">&quot;bark!!&quot;</span>);<br>    &#125; <br>&#125;<br></code></pre></td></tr></table></figure><p>我们定义了一个makenoise方法，其中的狗只能bark的叫，显然不符合现实，我们知道，狗的叫声是由狗的体重决定的（假设），所以想要在Dog类中，加入特征weight，根据其大小判断具体的叫声。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> &#123;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> weight;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">makeNoise</span><span class="hljs-params">()</span> &#123;  <br>        <span class="hljs-keyword">if</span>(weight&lt;<span class="hljs-number">10</span>)  <br>            System.out.println(<span class="hljs-string">&quot;yipyip!!!&quot;</span>);  <br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(weight &lt;<span class="hljs-number">30</span>) &#123;  <br>            System.out.println(<span class="hljs-string">&quot;bark!!!&quot;</span>);  <br>        &#125;  <br>        <span class="hljs-keyword">else</span>&#123;  <br>            System.out.println(<span class="hljs-string">&quot;arooo!!!&quot;</span>);  <br>        &#125;  <br>    &#125;  <br>&#125;<br></code></pre></td></tr></table></figure><p>通过对比，发现在定义方法时有static会报错，为什么？<br>因为要使用的weight为非静态变量，而静态方法无法调用非静态变量，所以去掉了static。<br>此时我们再调用makenoise方法，发现还是失败的。<br>这又是为什么？<br>因为非静态的方法需要在实例下才能调用，而静态方法则无需实例，可以直接调用<br>可以理解为，静态方法是所有狗的特征，所以我无需代入具体的狗，而非静态的方法是具体的狗的特征，需要一个实例才能使用。<br>接下来将用两种不同形式去表示两只狗哪只的体重较大：    </p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Dog <span class="hljs-title function_">Maxweights</span><span class="hljs-params">(Dog d, Dog d1)</span>  <br>&#123;  <br>    <span class="hljs-keyword">if</span>(d.weight&gt;=d1.weight)  <br>        <span class="hljs-keyword">return</span> d;  <br>    <span class="hljs-keyword">else</span>  <br>        <span class="hljs-keyword">return</span> d1;  <br>&#125;<br></code></pre></td></tr></table></figure><p>此方法指取两只狗进行比较，再看非静态方法：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Dog <span class="hljs-title function_">Maxweights</span><span class="hljs-params">(Dog d, Dog d1)</span>  <br>&#123;  <br>    <span class="hljs-keyword">if</span>(d.weight&gt;=d1.weight)  <br>        <span class="hljs-keyword">return</span> d;  <br>    <span class="hljs-keyword">else</span>  <br>        <span class="hljs-keyword">return</span> d1;  <br>&#125;<br></code></pre></td></tr></table></figure><p>这代表了赋予一个具体狗与其他狗比大小的能力，并返回体重较大者。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>-数据结构与算法 -CS61B</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cs</tag>
+      
+      <tag>java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1-introduction</title>
+    <link href="/2025/05/25/Lecture%201/"/>
+    <url>/2025/05/25/Lecture%201/</url>
+    
+    <content type="html"><![CDATA[<h2 id="java的介绍："><a href="#java的介绍：" class="headerlink" title="java的介绍："></a>java的介绍：</h2><p>Java是一种面向对象的编程语言([[对象]])([[面向对象编程]]),可知有“类”，“方法”等重要概念，所以编写的代码都要存在一个类中,同时类中，也需要方法，才能正常运行。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloWorld</span><span class="hljs-comment">//类</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span><br>    &#123;<br>    &#125; <br>&#125;<br></code></pre></td></tr></table></figure><p>java中的print：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">System.out.println(<span class="hljs-string">&quot;Hello World&quot;</span>);<br></code></pre></td></tr></table></figure><p>其余定义变量，if-else，for循环与c类似。<br>其中，在java中建立一个新方法（创建新函数）需要在类中进行，同样有返回值和返回数据类型。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">larger</span><span class="hljs-params">(x,y)</span><br>&#123;<br><span class="hljs-keyword">if</span>(x&gt;y)<br><span class="hljs-keyword">return</span> x;<br><span class="hljs-keyword">else</span> <br><span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure><p>java具有模块化的优点，模块之间互不影响<br>实现类car的定义：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Car</span> &#123;  <br>    String name;  <br>    <span class="hljs-type">int</span> wheels=<span class="hljs-number">4</span>;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Car</span><span class="hljs-params">(String name)</span>  <br>    &#123;  <br>        <span class="hljs-built_in">this</span>.name=name;  <br>        <span class="hljs-built_in">this</span>.wheels=<span class="hljs-number">4</span>;  <br>    &#125;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">drive</span><span class="hljs-params">()</span>  <br>    &#123;  <br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.wheels&lt;<span class="hljs-number">4</span>)  <br>            System.out.println(<span class="hljs-built_in">this</span>.name+<span class="hljs-string">&quot;what?the car is died&quot;</span>);  <br>        <span class="hljs-keyword">else</span>  <br>            System.out.println(<span class="hljs-built_in">this</span>.name+<span class="hljs-string">&quot;wow,what a fast car!&quot;</span>);  <br>    &#125;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">driveinhole</span><span class="hljs-params">()</span>  <br>    &#123;  <br>        <span class="hljs-built_in">this</span>.wheels--;  <br>        System.out.println(<span class="hljs-built_in">this</span>.name+<span class="hljs-string">&quot;&#x27;s something lost&quot;</span>);  <br>    &#125;  <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>  <br>    &#123;  <br>        <span class="hljs-type">Car</span> <span class="hljs-variable">car1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>(<span class="hljs-string">&quot;lalala&quot;</span>);  <br>        car1.drive();  <br>        car1.driveinhole();  <br>        car1.drive();  <br>    &#125;  <br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>-数据结构与算法 -CS61B</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cs</tag>
+      
+      <tag>java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>健身小白饮食运动计划</title>
     <link href="/2025/05/25/%E5%81%A5%E8%BA%AB%E5%B0%8F%E7%99%BD%E9%A5%AE%E9%A3%9F%E8%BF%90%E5%8A%A8%E8%AE%A1%E5%88%92/"/>
     <url>/2025/05/25/%E5%81%A5%E8%BA%AB%E5%B0%8F%E7%99%BD%E9%A5%AE%E9%A3%9F%E8%BF%90%E5%8A%A8%E8%AE%A1%E5%88%92/</url>
