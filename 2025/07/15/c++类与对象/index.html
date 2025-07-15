@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="琴吹滴的博客">
 <meta property="og:description" content="面向对象的三大特性：封装，继承，多态具有相同性质的对象，抽象为一个类。例如狗属于狗类 封装： 将属性和行为作为一个整体，表现生活中的事物 属性和行为加以权限控制  为什么要封装？ 设计类的时候，可以将属性和行为写在一起类的定义：  1234567class Circle &#123;      (权限)public:      (属性)int radius;      (行为)double cal">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:/test/blog/themes/fluid/source/img/load.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/load.png">
 <meta property="article:published_time" content="2025-07-15T14:37:15.000Z">
-<meta property="article:modified_time" content="2025-07-15T14:51:39.749Z">
+<meta property="article:modified_time" content="2025-07-15T14:55:39.082Z">
 <meta property="article:author" content="琴吹滴">
 <meta property="article:tag" content="cs">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:/test/blog/themes/fluid/source/img/load.png">
+<meta name="twitter:image" content="https://qinchuid.github.io/img/load.png">
   
   
   
@@ -328,7 +328,7 @@
 <hr>
 <h2 id="构造函数的分类及调用"><a href="#构造函数的分类及调用" class="headerlink" title="构造函数的分类及调用"></a>构造函数的分类及调用</h2><p>按照参数分为无参函数和有参函数<br>按照类型分为普通构造和拷贝构造    </p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>  <br>&#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-built_in">Person</span>()  <br>    &#123;  <br>        cout&lt;&lt;<span class="hljs-string">&quot;Person构造函数的调用&quot;</span>&lt;&lt;endl;  <br>    &#125;  <br>    <span class="hljs-built_in">Person</span>(string str) &#123;  <br>        name = str;  <br>        cout&lt;&lt;<span class="hljs-string">&quot;Person构造函数的调用&quot;</span>&lt;&lt;name&lt;&lt;endl;  <br>    &#125;  <br>    <span class="hljs-built_in">Person</span>(Person &amp;p) &#123;  <br>        name = p.name;  <br>        cout&lt;&lt;<span class="hljs-string">&quot;Person构造函数的调用&quot;</span>&lt;&lt;name&lt;&lt;endl;  <br>    &#125;  <br>    ~<span class="hljs-built_in">Person</span>()  <br>    &#123;  <br>        cout&lt;&lt;<span class="hljs-string">&quot;Person构造函数的调用&quot;</span>&lt;&lt;endl;  <br>    &#125;  <br>    string name;  <br>&#125;;```<br>调用：    <br>```c++<br>括号法：<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">display</span><span class="hljs-params">()</span> </span>&#123;  <br>    Person p1;  <br>    <span class="hljs-function">Person <span class="hljs-title">p2</span><span class="hljs-params">(<span class="hljs-string">&quot;sylvia&quot;</span>)</span></span>;  <br>    <span class="hljs-function">Person <span class="hljs-title">p3</span><span class="hljs-params">(p2)</span></span>;  <br>&#125;  <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;  <br>    <span class="hljs-built_in">display</span>();  <br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="C:/test/blog/themes/fluid/source/img/load.png" srcset="/img/loading.gif" lazyload alt="运行结果"><br>注意：当对象作为参数传入函数或者作为函数返回值时，会调用拷贝构造函数    </p>
+<p><img src="/../img/load.png" srcset="/img/loading.gif" lazyload alt="运行结果"><br>注意：当对象作为参数传入函数或者作为函数返回值时，会调用拷贝构造函数    </p>
 <hr>
 <h2 id="构造函数调用规则"><a href="#构造函数调用规则" class="headerlink" title="构造函数调用规则"></a>构造函数调用规则</h2><p>c++会提供默认构造函数，析构参数，拷贝构造函数<br>如果提供有参构造函数，不提供无参构造；如果定义拷贝构造函数，不提供任何构造函数。<br>注意：如果没有构造函数程序不能运行  </p>
 <hr>
