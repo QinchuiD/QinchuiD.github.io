@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>numpy</title>
+    <link href="/2025/07/24/numpy/"/>
+    <url>/2025/07/24/numpy/</url>
+    
+    <content type="html"><![CDATA[<h1 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h1><p><img src="/../img/numpy/1.png"><br>可以设置为整型或者浮点型，数组具有同化的性质，例如创建一整型数组，插入一个浮点型数据，会被转为整型存入，反之亦然。<br>当然也是有办法进行转化的，有三种方式，分别为使用astype方法，使用除法，与浮点数(组)做运算<br><img src="/../img/numpy/2.png"></p><h1 id="数组维度"><a href="#数组维度" class="headerlink" title="数组维度"></a>数组维度</h1><p>不同维度的数组，外形上是以中括号区分，几层就是几维数组<br>一些函数需要传入数组的形状参数：</p><ol><li>一维数组的形状参数：形如x</li><li>二维数组：（x,y）x行y列</li><li>三维：(x,y,z)</li></ol><h2 id="数组维度的转换"><a href="#数组维度的转换" class="headerlink" title="数组维度的转换"></a>数组维度的转换</h2><p> 需要用到reshape方法，这个方法的好处是，当我们填入要改变的行或列后，填入-1后会自行计算另一个数据<br><img src="/../img/numpy/3.png"></p><h1 id="创建指定数组"><a href="#创建指定数组" class="headerlink" title="创建指定数组"></a>创建指定数组</h1><p>当已知数组的每一个元素时，可以用np.array()创建<br>也可用np.arrange()创建递增数组，可传入三个参数（起点，终点，步长）<br>若要创建同值数组，可以使用np.zeros()和np.ones()需要传入数组的形状（默认为浮点型）<br><img src="/../img/numpy/4.png"></p><h1 id="创建随机数组"><a href="#创建随机数组" class="headerlink" title="创建随机数组"></a>创建随机数组</h1><p>使用np.random.random()形成0-1的浮点型随机矩阵，可用数组运算改变随机数的范围，需要传入数组形状<br>使用np.random.randint()生成整型随机矩阵，需要传入数据范围和数组形状<br>使用np.random.normal()生成服从正态分布的随机数组，需要传入均值，标准差和数组形状<br><img src="/../img/numpy/5.png"></p><h1 id="访问数组元素"><a href="#访问数组元素" class="headerlink" title="访问数组元素"></a>访问数组元素</h1><p>对于一维数组，可直接用[]访问，且支持正序倒序访问<br>对于更高维数组，需要写行列来确定<img src="/../img/numpy/6.png">（当然也可以用来修改）<br>numpy还提供了一种更加方便的花式索引，对于一维数组，可以访问到一部分数据。对于高维数组，可以一次访问多个位置的数据。注意要使用两层中括号<br><img src="/../img/numpy/7.png"></p><h2 id="矩阵的切片"><a href="#矩阵的切片" class="headerlink" title="矩阵的切片"></a>矩阵的切片</h2><p><img src="/../img/numpy/0.png"><br>对于第一个切片，中括号1是截取第一行到第三行，中括号2截掉了第一列和倒数第一列。<br>第二个切片则为步长为3的截取行，步长为2的截取截取列<br>注意：创造的切片只是原数组的视图，并没有创建一个新数组，改变切片也会改变原数组，这是很节省内存的做法。同理，对于arr2&#x3D;arr1的操作，也没有创建新数组，只是建立了新的绑定关系。</p><h1 id="数组的变化"><a href="#数组的变化" class="headerlink" title="数组的变化"></a>数组的变化</h1><h2 id="矩阵的转置"><a href="#矩阵的转置" class="headerlink" title="矩阵的转置"></a>矩阵的转置</h2><p>对于二维及以上的矩阵，可以直接使用np.T直接转置。</p><h2 id="数组的反转"><a href="#数组的反转" class="headerlink" title="数组的反转"></a>数组的反转</h2><p>数组有上下翻转你np.flipud()和左右翻转np.fliplr()，对于单维数组，只有上下翻转。<br><img src="/../img/numpy/8.png"></p><h2 id="数组的拼接："><a href="#数组的拼接：" class="headerlink" title="数组的拼接："></a>数组的拼接：</h2><p>对于单维数组，可以用np.concatenate(),进行拼接<br><img src="/../img/numpy/9.png"><br>对于多维数组，也用上述方法进行拼接，但是要确保维数的吻合，且根据参数axis为0&#x2F;1分为按行拼接和按列拼接。注意，向量不能和矩阵拼接，需要先转化为矩阵。<br><img src="/../img/numpy/10.png"></p><h2 id="分裂数组"><a href="#分裂数组" class="headerlink" title="分裂数组"></a>分裂数组</h2><p>对于一维数组，可以直接用<br><img src="/../img/numpy/11.png"><br>输入的索引则为截断位置<br>对于矩阵数组，依然使用np.split(),得到的结果依然为矩阵，需要标定分割的列或行，依靠axis来区分行分裂和列分裂。<br><img src="/../img/numpy/12.png"></p><h1 id="数组的运算"><a href="#数组的运算" class="headerlink" title="数组的运算"></a>数组的运算</h1><p>对于数组与常数，数组与同型数组的计算，均为逐个计算。<br><img src="/../img/numpy/13.png"><br>对于矩阵和向量运算，向量自动升级为行矩阵。若矩阵形状为(x,y),则把向量改为(1,y)的行矩阵，并广播为(x,y)的矩阵其中每一行都相同。列矩阵与向量同理，自动广播为(x,y),若是行矩阵X列矩阵，则双方均广播。    </p><h2 id="矩阵计算"><a href="#矩阵计算" class="headerlink" title="矩阵计算"></a>矩阵计算</h2><p>上述中提到的逐项相乘并不符合线性代数中矩阵乘法的定义，若想实现，则需要np.dot()来实现，规则与线性代数中相同。<br><img src="/../img/numpy/14.png"></p><h2 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h2><p>Numpy还提供了很多数学函数，可以对矩阵进行计算：</p><ol><li>np.abs()  &#x2F;&#x2F;绝对值</li><li>np.sin &#x2F;cos&#x2F; tan()  &#x2F;&#x2F;三角函数</li><li>np.exp()  &#x2F;&#x2F;e ^ x</li><li>np.log(x)&#x2F;np.log(n)  &#x2F;&#x2F;对数函数logn(X)</li></ol><h2 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h2><ol><li>np.max:在矩阵中寻找每列&#x2F;行的最大值，根据axis的值区分，axis为0时，去每列最大值，若不写axis，则求整体的最大值。</li><li>np.sun()&#x2F;np.prod():根据axis不同算出每行&#x2F;列的和&#x2F;积，axis不写则为整体的和&#x2F;积</li><li>np.mean()&#x2F;np.std():分别为求平均数和标准差，同样根据axis区分</li></ol><h1 id="布尔型数组"><a href="#布尔型数组" class="headerlink" title="布尔型数组"></a>布尔型数组</h1><p>因为布尔类型数据常由判断中产生，所以可以用正常的矩阵来生成布尔型数组：<br><img src="/../img/numpy/15.png"><br>布尔型矩阵有什么用呢？根据sum可以知道True的个数，根据np.any可以判断矩阵中是否存在True，有就返回True；np.all()则判断是否有False，有就返回False。<br><img src="/../img/numpy/16.png"></p><h1 id="数组和张量"><a href="#数组和张量" class="headerlink" title="数组和张量"></a>数组和张量</h1><p>Pytorch作为首屈一指的深度学习库，将Numpy语法吸收。基础语法几乎相同，需要将np对应torch，array对应张量tensor，n阶数组对应n阶张量。<br>ts&#x3D;torch.tensor(arr)<br>arr&#x3D;np.array(ts)<br>可以实现张量和数组的互换<br>二者具体差异为：<br><img src="/../img/numpy/17.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>python</tag>
+      
+      <tag>numpy</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>STL(更新中)</title>
     <link href="/2025/07/18/STL-%E6%9B%B4%E6%96%B0%E4%B8%AD/"/>
     <url>/2025/07/18/STL-%E6%9B%B4%E6%96%B0%E4%B8%AD/</url>

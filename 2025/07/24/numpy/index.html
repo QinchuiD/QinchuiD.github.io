@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/touxiang.jpg">
+  <link rel="icon" href="/img/touxiang.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="琴吹滴">
+  <meta name="keywords" content="AI">
+  
+    <meta name="description" content="创建数组可以设置为整型或者浮点型，数组具有同化的性质，例如创建一整型数组，插入一个浮点型数据，会被转为整型存入，反之亦然。当然也是有办法进行转化的，有三种方式，分别为使用astype方法，使用除法，与浮点数(组)做运算 数组维度不同维度的数组，外形上是以中括号区分，几层就是几维数组一些函数需要传入数组的形状参数：  一维数组的形状参数：形如x 二维数组：（x,y）x行y列 三维：(x,y,z)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="numpy">
+<meta property="og:url" content="https://qinchuid.github.io/2025/07/24/numpy/index.html">
+<meta property="og:site_name" content="琴吹滴的博客">
+<meta property="og:description" content="创建数组可以设置为整型或者浮点型，数组具有同化的性质，例如创建一整型数组，插入一个浮点型数据，会被转为整型存入，反之亦然。当然也是有办法进行转化的，有三种方式，分别为使用astype方法，使用除法，与浮点数(组)做运算 数组维度不同维度的数组，外形上是以中括号区分，几层就是几维数组一些函数需要传入数组的形状参数：  一维数组的形状参数：形如x 二维数组：（x,y）x行y列 三维：(x,y,z)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/1.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/2.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/3.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/4.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/5.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/6.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/7.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/0.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/8.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/9.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/10.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/11.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/12.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/13.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/14.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/15.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/16.png">
+<meta property="og:image" content="https://qinchuid.github.io/img/numpy/17.png">
+<meta property="article:published_time" content="2025-07-23T17:15:52.000Z">
+<meta property="article:modified_time" content="2025-07-23T17:28:15.179Z">
+<meta property="article:author" content="琴吹滴">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="numpy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://qinchuid.github.io/img/numpy/1.png">
+  
+  
+  
+  <title>numpy - 琴吹滴的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"qinchuid.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Wonderland</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/5.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="numpy"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        琴吹滴
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-24 01:15" pubdate>
+          2025年7月24日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">numpy</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h1><p><img src="/../img/numpy/1.png" srcset="/img/loading.gif" lazyload><br>可以设置为整型或者浮点型，数组具有同化的性质，例如创建一整型数组，插入一个浮点型数据，会被转为整型存入，反之亦然。<br>当然也是有办法进行转化的，有三种方式，分别为使用astype方法，使用除法，与浮点数(组)做运算<br><img src="/../img/numpy/2.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="数组维度"><a href="#数组维度" class="headerlink" title="数组维度"></a>数组维度</h1><p>不同维度的数组，外形上是以中括号区分，几层就是几维数组<br>一些函数需要传入数组的形状参数：</p>
+<ol>
+<li>一维数组的形状参数：形如x</li>
+<li>二维数组：（x,y）x行y列</li>
+<li>三维：(x,y,z)</li>
+</ol>
+<h2 id="数组维度的转换"><a href="#数组维度的转换" class="headerlink" title="数组维度的转换"></a>数组维度的转换</h2><p> 需要用到reshape方法，这个方法的好处是，当我们填入要改变的行或列后，填入-1后会自行计算另一个数据<br><img src="/../img/numpy/3.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="创建指定数组"><a href="#创建指定数组" class="headerlink" title="创建指定数组"></a>创建指定数组</h1><p>当已知数组的每一个元素时，可以用np.array()创建<br>也可用np.arrange()创建递增数组，可传入三个参数（起点，终点，步长）<br>若要创建同值数组，可以使用np.zeros()和np.ones()需要传入数组的形状（默认为浮点型）<br><img src="/../img/numpy/4.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="创建随机数组"><a href="#创建随机数组" class="headerlink" title="创建随机数组"></a>创建随机数组</h1><p>使用np.random.random()形成0-1的浮点型随机矩阵，可用数组运算改变随机数的范围，需要传入数组形状<br>使用np.random.randint()生成整型随机矩阵，需要传入数据范围和数组形状<br>使用np.random.normal()生成服从正态分布的随机数组，需要传入均值，标准差和数组形状<br><img src="/../img/numpy/5.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="访问数组元素"><a href="#访问数组元素" class="headerlink" title="访问数组元素"></a>访问数组元素</h1><p>对于一维数组，可直接用[]访问，且支持正序倒序访问<br>对于更高维数组，需要写行列来确定<img src="/../img/numpy/6.png" srcset="/img/loading.gif" lazyload>（当然也可以用来修改）<br>numpy还提供了一种更加方便的花式索引，对于一维数组，可以访问到一部分数据。对于高维数组，可以一次访问多个位置的数据。注意要使用两层中括号<br><img src="/../img/numpy/7.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="矩阵的切片"><a href="#矩阵的切片" class="headerlink" title="矩阵的切片"></a>矩阵的切片</h2><p><img src="/../img/numpy/0.png" srcset="/img/loading.gif" lazyload><br>对于第一个切片，中括号1是截取第一行到第三行，中括号2截掉了第一列和倒数第一列。<br>第二个切片则为步长为3的截取行，步长为2的截取截取列<br>注意：创造的切片只是原数组的视图，并没有创建一个新数组，改变切片也会改变原数组，这是很节省内存的做法。同理，对于arr2&#x3D;arr1的操作，也没有创建新数组，只是建立了新的绑定关系。</p>
+<h1 id="数组的变化"><a href="#数组的变化" class="headerlink" title="数组的变化"></a>数组的变化</h1><h2 id="矩阵的转置"><a href="#矩阵的转置" class="headerlink" title="矩阵的转置"></a>矩阵的转置</h2><p>对于二维及以上的矩阵，可以直接使用np.T直接转置。</p>
+<h2 id="数组的反转"><a href="#数组的反转" class="headerlink" title="数组的反转"></a>数组的反转</h2><p>数组有上下翻转你np.flipud()和左右翻转np.fliplr()，对于单维数组，只有上下翻转。<br><img src="/../img/numpy/8.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="数组的拼接："><a href="#数组的拼接：" class="headerlink" title="数组的拼接："></a>数组的拼接：</h2><p>对于单维数组，可以用np.concatenate(),进行拼接<br><img src="/../img/numpy/9.png" srcset="/img/loading.gif" lazyload><br>对于多维数组，也用上述方法进行拼接，但是要确保维数的吻合，且根据参数axis为0&#x2F;1分为按行拼接和按列拼接。注意，向量不能和矩阵拼接，需要先转化为矩阵。<br><img src="/../img/numpy/10.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="分裂数组"><a href="#分裂数组" class="headerlink" title="分裂数组"></a>分裂数组</h2><p>对于一维数组，可以直接用<br><img src="/../img/numpy/11.png" srcset="/img/loading.gif" lazyload><br>输入的索引则为截断位置<br>对于矩阵数组，依然使用np.split(),得到的结果依然为矩阵，需要标定分割的列或行，依靠axis来区分行分裂和列分裂。<br><img src="/../img/numpy/12.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="数组的运算"><a href="#数组的运算" class="headerlink" title="数组的运算"></a>数组的运算</h1><p>对于数组与常数，数组与同型数组的计算，均为逐个计算。<br><img src="/../img/numpy/13.png" srcset="/img/loading.gif" lazyload><br>对于矩阵和向量运算，向量自动升级为行矩阵。若矩阵形状为(x,y),则把向量改为(1,y)的行矩阵，并广播为(x,y)的矩阵其中每一行都相同。列矩阵与向量同理，自动广播为(x,y),若是行矩阵X列矩阵，则双方均广播。    </p>
+<h2 id="矩阵计算"><a href="#矩阵计算" class="headerlink" title="矩阵计算"></a>矩阵计算</h2><p>上述中提到的逐项相乘并不符合线性代数中矩阵乘法的定义，若想实现，则需要np.dot()来实现，规则与线性代数中相同。<br><img src="/../img/numpy/14.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h2><p>Numpy还提供了很多数学函数，可以对矩阵进行计算：</p>
+<ol>
+<li>np.abs()  &#x2F;&#x2F;绝对值</li>
+<li>np.sin &#x2F;cos&#x2F; tan()  &#x2F;&#x2F;三角函数</li>
+<li>np.exp()  &#x2F;&#x2F;e ^ x</li>
+<li>np.log(x)&#x2F;np.log(n)  &#x2F;&#x2F;对数函数logn(X)</li>
+</ol>
+<h2 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h2><ol>
+<li>np.max:在矩阵中寻找每列&#x2F;行的最大值，根据axis的值区分，axis为0时，去每列最大值，若不写axis，则求整体的最大值。</li>
+<li>np.sun()&#x2F;np.prod():根据axis不同算出每行&#x2F;列的和&#x2F;积，axis不写则为整体的和&#x2F;积</li>
+<li>np.mean()&#x2F;np.std():分别为求平均数和标准差，同样根据axis区分</li>
+</ol>
+<h1 id="布尔型数组"><a href="#布尔型数组" class="headerlink" title="布尔型数组"></a>布尔型数组</h1><p>因为布尔类型数据常由判断中产生，所以可以用正常的矩阵来生成布尔型数组：<br><img src="/../img/numpy/15.png" srcset="/img/loading.gif" lazyload><br>布尔型矩阵有什么用呢？根据sum可以知道True的个数，根据np.any可以判断矩阵中是否存在True，有就返回True；np.all()则判断是否有False，有就返回False。<br><img src="/../img/numpy/16.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="数组和张量"><a href="#数组和张量" class="headerlink" title="数组和张量"></a>数组和张量</h1><p>Pytorch作为首屈一指的深度学习库，将Numpy语法吸收。基础语法几乎相同，需要将np对应torch，array对应张量tensor，n阶数组对应n阶张量。<br>ts&#x3D;torch.tensor(arr)<br>arr&#x3D;np.array(ts)<br>可以实现张量和数组的互换<br>二者具体差异为：<br><img src="/../img/numpy/17.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/python/" class="category-chain-item">python</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/python/" class="print-no-link">#python</a>
+      
+        <a href="/tags/numpy/" class="print-no-link">#numpy</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>numpy</div>
+      <div>https://qinchuid.github.io/2025/07/24/numpy/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>琴吹滴</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/07/18/STL-%E6%9B%B4%E6%96%B0%E4%B8%AD/" title="STL(更新中)">
+                        <span class="hidden-mobile">STL(更新中)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
