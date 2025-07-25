@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>stl算法</title>
+    <link href="/2025/07/25/stl%E7%AE%97%E6%B3%95/"/>
+    <url>/2025/07/25/stl%E7%AE%97%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>主要由头文件“algorithm”，“functional“，”numeric“组成  </p><h4 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h4><ul><li>逐项遍历<br>for_each();需要自行传入要遍历的起点和终点，以及处理的方法。<br><img src="/../img/stl%E7%AE%97%E6%B3%95/foreach.png"></li><li>数据遍历转移;<br>transform()主要用途是把一个容器中数据搬运到另一目标容器，目标容器需要提前开辟空间。传入待搬运的起点终点和目标容器的终点，以及搬运方式<br><img src="/../img/stl%E7%AE%97%E6%B3%95/transform.png"></li></ul><h4 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h4><ul><li>根据值查找<br>find在容器中寻找数据，返回对应的迭代器，如果数据不存在，则返回end(),对于内置的数据类型，很容易判断是否相等，但对于自定义的类，判断相等则比较复杂，需要自己重载&#x3D;&#x3D; 符号来规定判断方式![[find.png]]</li><li>根据条件查找<br>find_if()查找容器内符合某些条件的数据，需要传入范围和具体条件。<br><img src="/../img/stl%E7%AE%97%E6%B3%95/if.png"></li><li>adjacent_find<br>查找相邻重复元素，返回迭代器</li><li>binary_search二分查找<br>查找指定元素，返回值为布尔类型，查找速度快但只能查找有序序列</li><li>count<br>统计数据出现次数，与find类似，当想统计自定义类的数据时，需要自行重载&#x3D;&#x3D; 定义判断方式</li><li>count_if<br>与findif类似，统计满足条件的数据，需要自行传入具体条件</li></ul><h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><ul><li>按顺序排序<br>排序传入范围的数据，默认从小到大排序，传入greater&lt;int&gt;就可以改变<br><img src="/../img/stl%E7%AE%97%E6%B3%95/sort.png"></li><li>随机打乱<br>random_shuffle,随即调整指定范围内元素次序，以时间设置种子可以确保每次随机后结果都不同<br><img src="/../img/stl%E7%AE%97%E6%B3%95/random.png"></li><li>合并有序容器<br>merge可合并两个有序(相同顺序)的容器并按顺序排序需要传入两个容器的合并区间和目标容器的起点，目标容器需要提前扩大容量<br><img src="/../img/stl%E7%AE%97%E6%B3%95/merge.png"></li><li>翻转<br>通过revrese传入起点和终点，翻转区间内的数据</li></ul><h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><ul><li>指定元素替换<br>使用replace可以把区间内指定的全部旧元素换成指定的新元素，replace_if则是替换符合条件的元素<br><img src="/../img/stl%E7%AE%97%E6%B3%95/replace.png"></li><li>互换容器<br>通过swap（v1,v2）互换两个容器的元素</li></ul><h2 id="算数算法"><a href="#算数算法" class="headerlink" title="算数算法"></a>算数算法</h2><p>需要头文件&lt;numeric&gt;</p><ul><li>求和算法<br>accumulate可以计算容器一个区间内元素的总和，还需要传入起始值<br><img src="/../img/stl%E7%AE%97%E6%B3%95/accu.png"></li></ul><h2 id="集合算法"><a href="#集合算法" class="headerlink" title="集合算法"></a>集合算法</h2><ul><li>set_intersection求交集</li><li>set_union求并集</li><li>set_difference求差集<br>返回值为最后一个数据的迭代器，因为在设定容器容量可能会过大，使用end遍历可能会遍历到无效数据，所以使用返回值更加准确的访问到需要的元素<br><img src="/../img/stl%E7%AE%97%E6%B3%95/set.png"></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cs</tag>
+      
+      <tag>c++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>numpy</title>
     <link href="/2025/07/24/numpy/"/>
     <url>/2025/07/24/numpy/</url>
