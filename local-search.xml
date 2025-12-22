@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>CS224n 学习笔记 (一)：词向量</title>
+    <link href="/2025/12/22/lecture1-Word2vec/"/>
+    <url>/2025/12/22/lecture1-Word2vec/</url>
+    
+    <content type="html"><![CDATA[<p>语言是促进人类发展的重要工具，我们希望计算机也能理解人类的语言。<br>同时，每个词的意思是在具体的语境中体现的，一个词语可能也有不同的意思，所以我们希望计算机也能理解这一点。<br>显然不能采用孤立的符号(one-hot编码)来表示单词，因为体现不出相似性且维度较大，所以使用紧凑的词向量(word vector)来表示每一个单词，通过向量间点积的大小来表示两个单词的相似程度。<br>相当于我们把每个词嵌入到高维的空间中，空间中的距离远近表示相似程度的大小</p><hr><p>那么我们该怎么把单词嵌入到合适的位置呢？</p><h2 id="Word2vec"><a href="#Word2vec" class="headerlink" title="Word2vec"></a>Word2vec</h2><p>在文本中，如果两个词相邻出现，那么可以判定两个词逻辑上是相邻的，例如”the”和“student”常常相邻出现。<br>word2vec则运用了这一特点，通过计算与相邻词的相似程度去改变词向量的值。<br>$$<br>\text{Likelihood} &#x3D; L(\theta) &#x3D; \prod_{t&#x3D;1}^{T} \prod_{-m \leq j \leq m \atop j \neq 0} P(w_{t+j} \mid w_t; \theta)<br>$$<br>使用如上式子表示相似程度，我们希望使这个值最大，因为我们往往是求让某个函数最小，所以取负数来把问题转化，又因为算积比较慢，所以取对数将问题转化为求和。<br>$$<br>J(\theta) &#x3D; -\frac{1}{T}\log L(\theta) &#x3D; -\frac{1}{T} \sum_{t&#x3D;1}^{T} \sum_{-m \leq j \leq m \atop j \neq 0} \log P(w_{t+j} \mid w_t; \theta)<br>$$<br>这个概率表示以$w_t$为中心词时，$w_{t+j}$ 出现的概率，怎么计算这个概率呢？<br>规定每个词有两个向量，一个作为中心词是使用(v),一个作为相邻词时使用(μ)，使用softmax函数，将中心词与相邻词向量的点积与所有词和中心词点积之和的商作为概率。<br>$$<br>P(o|c) &#x3D; \frac{\exp(u_o^T v_c)}{\sum_{w \in V} \exp(u_w^T v_c)}<br>$$<br>在使用梯度下降时，我们分别要改变μ和v，使两个单词间距离缩小。</p><h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>word2web实际上是通过相邻词来确定自身位置。<br>在向量空间中，将观察到的“中心词-背景词”对相互拉近。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机科学</category>
+      
+      <category>自然语言处理</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>NLP</tag>
+      
+      <tag>CS224n</tag>
+      
+      <tag>词向量</tag>
+      
+      <tag>Python</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>123</title>
+    <link href="/2025/12/17/123/"/>
+    <url>/2025/12/17/123/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  
+</search>
