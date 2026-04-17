@@ -16,19 +16,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 18
+
+      - name: Downgrade npm to version 9
+        run: npm install -g npm@9
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+
       - name: Install dependencies
         run: pnpm install
+
       - name: Build
         run: pnpm build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
