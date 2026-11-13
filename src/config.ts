@@ -56,28 +56,28 @@ export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/head.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "小滴",
 	bio: "认真你就输了",
-   links: [
-       {
-           name: "QQ",
-           icon: "fa6-brands:qq",
-           url: "https://wpa.qq.com/msgrd?v=3&uin=你的QQ号&site=qq&menu=yes",
-       },
-       {
-           name: "微信",
-           icon: "fa6-brands:weixin",
-           url: "/wechat.png",
-       },
-       {
-           name: "GitHub",
-           icon: "fa6-brands:github",
-           url: "https://github.com/QinchuiD",
-       },
-       {
-           name: "邮箱",
-           icon: "fa6-solid:envelope",
-           url: "mailto:你的邮箱@example.com",
-       },
-   ],
+	links: [
+		{
+			name: "QQ",
+			icon: "fa6-brands:qq",
+			url: "https://wpa.qq.com/msgrd?v=3&uin=你的QQ号&site=qq&menu=yes",
+		},
+		{
+			name: "微信",
+			icon: "fa6-brands:weixin",
+			url: "/wechat.png",
+		},
+		{
+			name: "GitHub",
+			icon: "fa6-brands:github",
+			url: "https://github.com/QinchuiD",
+		},
+		{
+			name: "邮箱",
+			icon: "fa6-solid:envelope",
+			url: "mailto:你的邮箱@example.com",
+		},
+	],
 };
 
 export const licenseConfig: LicenseConfig = {
