@@ -1,0 +1,118 @@
+---
+import { Icon } from "astro-icon/components";
+import { url } from "../utils/url-utils";
+---
+<blog-search data-index-url={url("/pagefind/pagefind.js")}>
+    <dialog class="search-dialog" aria-labelledby="search-title">
+        <div class="search-heading">
+            <h2 id="search-title">搜索</h2>
+            <button class="header-icon" type="button" data-search-close aria-label="关闭搜索">
+                <Icon name="material-symbols:close-rounded" />
+            </button>
+        </div>
+        <div class="search-input-wrap">
+            <Icon name="material-symbols:search-rounded" />
+            <input type="search" aria-label="搜索文章与页面" placeholder="搜索文章与页面…" autocomplete="off" />
+            <kbd>Esc</kbd>
+        </div>
+        <p class="search-status" role="status" aria-live="polite">输入关键词开始搜索</p>
+        <div class="search-results"></div>
+        <div class="search-hint">按 Esc 关闭 · Ctrl / ⌘ K 打开搜索</div>
+    </dialog>
+</blog-search>
+
+<script>
+import type { SearchResult } from "../global";
+
+type SearchIndex = {
+	search: (query: string) => Promise<{
+		results: { data: () => Promise<SearchResult> }[];
+	}>;
+};
+
+class BlogSearch extends HTMLElement {
+	connectedCallback() {
+		const dialog = this.querySelector<HTMLDialogElement>("dialog");
+		const input = this.querySelector<HTMLInputElement>("input");
+		const status = this.querySelector<HTMLElement>(".search-status");
+		const results = this.querySelector<HTMLElement>(".search-results");
+		if (!dialog || !input || !status || !results) return;
+
+		let index: Promise<SearchIndex> | undefined;
+		let revision = 0;
+		let timer: ReturnType<typeof setTimeout>;
+
+		const open = () => {
+			if (!dialog.open) dialog.showModal();
+			input.focus();
+		};
+		const close = () => dialog.close();
+
+		document.addEventListener("click", (event) => {
+			if (event.target instanceof Element && event.target.closest("[data-search-open]")) open();
+		});
+		this.querySelector("[data-search-close]")?.addEventListener("click", close);
+		dialog.addEventListener("click", (event) => {
+			if (event.target !== dialog) return;
+			const bounds = dialog.getBoundingClientRect();
+			if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) close();
+		});
+		document.addEventListener("keydown", (event) => {
+			if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+				event.preventDefault();
+				if (dialog.open) close();
+				else open();
+			}
+		});
+
+		const search = async (keyword: string, currentRevision: number) => {
+			results.replaceChildren();
+			if (!keyword) {
+				status.textContent = "输入关键词开始搜索";
+				return;
+			}
+			status.textContent = "正在搜索…";
+			try {
+				if (!index) {
+					const address = this.dataset.indexUrl;
+					if (!address) throw new Error("Missing search index");
+					index = import(/* @vite-ignore */ address) as Promise<SearchIndex>;
+				}
+				const response = await (await index).search(keyword);
+				const matches = await Promise.all(response.results.slice(0, 20).map((item) => item.data()));
+				if (currentRevision !== revision) return;
+				status.textContent = response.results.length
+					? `找到 ${response.results.length} 条结果${response.results.length > 20 ? "，显示前 20 条" : ""}`
+					: "没有找到相关内容";
+				for (const item of matches) {
+					const anchor = document.createElement("a");
+					anchor.className = "search-result";
+					const address = new URL(item.url, window.location.origin);
+					if (address.origin !== window.location.origin) continue;
+					anchor.href = address.href;
+					const heading = document.createElement("h3");
+					heading.textContent = item.meta.title || "未命名页面";
+					const excerpt = document.createElement("p");
+					const decoded = document.createElement("textarea");
+					decoded.innerHTML = item.excerpt.replace(/<[^>]*>/g, "");
+					excerpt.textContent = decoded.value;
+					anchor.append(heading, excerpt);
+					results.append(anchor);
+				}
+			} catch {
+				if (currentRevision !== revision) return;
+				index = undefined;
+				status.textContent = "搜索暂时不可用，请稍后重试。";
+			}
+		};
+
+		input.addEventListener("input", () => {
+			clearTimeout(timer);
+			const currentRevision = ++revision;
+			timer = setTimeout(() => search(input.value.trim(), currentRevision), 180);
+		});
+	}
+}
+
+if (!customElements.get("blog-search")) customElements.define("blog-search", BlogSearch);
+</script>

@@ -1,14 +1,24 @@
 ---
 import ArchivePanel from "@components/ArchivePanel.svelte";
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
 import { getSortedPostsList } from "../utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
 ---
-
-<MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
+<MainGridLayout title="文章归档" description="所有文章，按时间排列。">
+    <section class="archive-page" aria-labelledby="archive-heading">
+        <div class="page-heading">
+            <h1 id="archive-heading">文章归档</h1>
+            <p>一些记录，一些思考。共 {sortedPostsList.length} 篇文章。</p>
+        </div>
+        {sortedPostsList.length > 0 ? (
+            <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte" />
+        ) : (
+            <div class="empty-posts archive-empty">
+                <Icon name="material-symbols:edit-note-outline-rounded" />
+                <div><h2>暂无文章</h2><p>新的记录会在这里与你见面。</p></div>
+            </div>
+        )}
+    </section>
 </MainGridLayout>
-

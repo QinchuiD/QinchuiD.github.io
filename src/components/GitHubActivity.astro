@@ -1,0 +1,67 @@
+---
+import { Icon } from "astro-icon/components";
+import { getGitHubActivity } from "../utils/github-utils";
+
+interface Props {
+	username: string;
+}
+
+const { username } = Astro.props;
+const { contributions, fetchedAt } = await getGitHubActivity(username);
+const total = contributions.reduce((sum, day) => sum + day.count, 0);
+const firstDate = contributions[0]?.date;
+const padding = firstDate ? new Date(`${firstDate}T00:00:00Z`).getUTCDay() : 0;
+const columns = Math.ceil((padding + contributions.length) / 7);
+const months = contributions.flatMap((day, index) => {
+	const previous = contributions[index - 1];
+	const isNewMonth =
+		!previous || previous.date.slice(0, 7) !== day.date.slice(0, 7);
+	if (!isNewMonth) return [];
+	const column = Math.floor((padding + index) / 7);
+	if (column > columns - 2 && index > 0) return [];
+	return [{ column, label: `${Number(day.date.slice(5, 7))}月` }];
+});
+const graphWidth = Math.max(columns * 16 - 3, 1);
+const updatedDate = fetchedAt.slice(0, 10);
+---
+<section class="github-activity" aria-labelledby="activity-title">
+    <div class="activity-heading">
+        <h2 id="activity-title"><Icon name="fa6-brands:github" /> GitHub 动态</h2>
+        <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+            @{username}<Icon name="material-symbols:arrow-outward-rounded" />
+        </a>
+    </div>
+    {contributions.length > 0 ? (
+        <>
+            <div class="activity-scroll" tabindex="0" aria-label="GitHub 贡献图，可左右滚动">
+                <svg class="activity-chart" viewBox={`0 0 ${graphWidth} 130`} role="img"
+                    aria-labelledby="activity-chart-title">
+                    <title id="activity-chart-title">{username} 最近一年的 GitHub 贡献记录，共 {total} 次贡献</title>
+                    {months.map(month => (
+                        <text x={month.column * 16} y="13" class="activity-month">{month.label}</text>
+                    ))}
+                    {contributions.map((day, index) => {
+                        const offset = padding + index;
+                        return (
+                            <rect x={Math.floor(offset / 7) * 16} y={27 + (offset % 7) * 15}
+                                width="12" height="12" rx="1.5" data-level={day.level}>
+                                <title>{day.date}：{day.count} 次贡献</title>
+                            </rect>
+                        );
+                    })}
+                </svg>
+            </div>
+            <div class="activity-caption">
+                <span>过去一年共 <strong>{total}</strong> 次贡献</span>
+                <div class="activity-legend" aria-label="颜色越深表示贡献越多">
+                    <span>少</span>
+                    {[0, 1, 2, 3, 4].map(level => <i data-level={level}></i>)}
+                    <span>多</span>
+                </div>
+            </div>
+            <p class="activity-updated">更新于 {updatedDate}</p>
+        </>
+    ) : (
+        <p class="muted-text">贡献记录暂时不可用，可以前往 GitHub 查看。</p>
+    )}
+</section>

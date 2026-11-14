@@ -1,31 +1,146 @@
 ---
-import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
+import { Icon } from "astro-icon/components";
 import Pagination from "../components/control/Pagination.astro";
+import GitHubActivity from "../components/GitHubActivity.astro";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import PostPage from "../components/PostPage.astro";
+import { homeConfig, profileConfig } from "../config";
 import { PAGE_SIZE } from "../constants/constants";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
+import { url } from "../utils/url-utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
-	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+	const posts = await getSortedPosts();
+	const categories = new Set(
+		posts.map((post) => post.data.category).filter(Boolean),
+	);
+	const words = posts.reduce((total, post) => {
+		const content = post.body || "";
+		const chinese = content.match(/[\u3400-\u9fff]/g)?.length || 0;
+		const other =
+			content.replace(/[\u3400-\u9fff]/g, " ").match(/[\p{L}\p{N}]+/gu)
+				?.length || 0;
+		return total + chinese + other;
+	}, 0);
+	return paginate(posts, {
+		pageSize: PAGE_SIZE,
+		props: {
+			stats: { posts: posts.length, categories: categories.size, words },
+		},
+	});
 }) satisfies GetStaticPaths;
-// https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
-const { page } = Astro.props;
+interface Props {
+	page: Page<CollectionEntry<"posts">>;
+	stats: { posts: number; categories: number; words: number };
+}
 
-const len = page.data.length;
+const { page, stats } = Astro.props;
+const githubLink = profileConfig.links.find((link) =>
+	link.url.startsWith("https://github.com/"),
+);
+const githubUsername = githubLink
+	? new URL(githubLink.url).pathname.split("/").filter(Boolean)[0]
+	: "";
+const updated = new Intl.DateTimeFormat("zh-CN", {
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+}).format(new Date());
+const isFirstPage = page.currentPage === 1;
 ---
-
-<MainGridLayout>
-    {len > 0 ? (
+<MainGridLayout title={isFirstPage ? undefined : `文章 · 第 ${page.currentPage} 页`}>
+    {isFirstPage && (
         <>
-            <PostPage page={page}></PostPage>
-            <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
+            <section class="profile-hero" aria-labelledby="profile-name">
+                <a href={url("/about/")} class="hero-avatar" aria-label={`关于${profileConfig.name}`}>
+                    <ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} loading="eager" />
+                </a>
+                <div class="hero-info">
+                    <h1 id="profile-name">{profileConfig.name}</h1>
+                    <div class="contact-links">
+                        {profileConfig.links.map(link => (
+                            <a class="outline-button contact-link" href={link.url.startsWith("/") ? url(link.url) : link.url}
+                                target="_blank" rel="noopener noreferrer" aria-label={link.name}>
+                                <Icon name={link.icon} /><span>{link.name}</span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </section>
+            <section class="home-section" aria-labelledby="intro-heading">
+                <h2 id="intro-heading">关于</h2>
+                <div class="section-content home-intro">
+                    <p class="intro-motto">{profileConfig.bio}</p>
+                    <p>{homeConfig.description}</p>
+                    <div class="section-action">
+                        <a class="outline-button" href={url("/about/")}>
+                            更多关于我 <Icon name="material-symbols:chevron-right-rounded" />
+                        </a>
+                    </div>
+                </div>
+            </section>
+            {homeConfig.education.length > 0 && (
+                <section class="home-section" aria-labelledby="education-heading">
+                    <h2 id="education-heading">教育经历</h2>
+                    <div class="section-content education-list">
+                        {homeConfig.education.map(item => (
+                            <div class="education-card">
+                                <h3>{item.url ? <a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}</a> : item.name}</h3>
+                                <p>{item.description}</p>
+                                <span>{item.period}</span>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
         </>
-    ) : (
-        <div class="card-base px-8 py-12 text-center text-50 onload-animation">
-            暂无文章
+    )}
+    <section class="home-section posts-section" aria-labelledby="posts-heading">
+        <h2 id="posts-heading">文章</h2>
+        <div class="section-content">
+            {page.data.length > 0 ? (
+                <>
+                    <PostPage page={page} />
+                    {page.lastPage > 1 && <Pagination page={page} />}
+                    <div class="section-action">
+                        <a class="text-link" href={url("/archive/")}>查看全部文章 <Icon name="material-symbols:arrow-forward-rounded" /></a>
+                    </div>
+                </>
+            ) : (
+                <div class="empty-posts">
+                    <Icon name="material-symbols:edit-note-outline-rounded" />
+                    <div><h3>暂无文章</h3><p>新的记录会在这里与你见面。</p></div>
+                </div>
+            )}
         </div>
+    </section>
+    {isFirstPage && (
+        <>
+            <section class="home-section statistics-section" aria-labelledby="statistics-heading">
+                <h2 id="statistics-heading">统计</h2>
+                <div class="section-content">
+                    <div class="statistics-grid">
+                        <div class="stat-card">
+                            <Icon name="material-symbols:description-outline-rounded" />
+                            <strong>{stats.posts}</strong><span>文章总数</span>
+                        </div>
+                        <div class="stat-card">
+                            <Icon name="material-symbols:folder-outline-rounded" />
+                            <strong>{stats.categories}</strong><span>文章分类</span>
+                        </div>
+                        <div class="stat-card">
+                            <Icon name="material-symbols:notes-rounded" />
+                            <strong>{stats.words.toLocaleString("zh-CN")}</strong><span>累计字数</span>
+                        </div>
+                    </div>
+                    <div class="site-updated"><span>最近更新</span><time>{updated}</time></div>
+                </div>
+            </section>
+            {homeConfig.githubActivity && githubUsername && <GitHubActivity username={githubUsername} />}
+        </>
     )}
 </MainGridLayout>

@@ -71,6 +71,17 @@ export type ProfileConfig = {
 	}[];
 };
 
+export type HomeConfig = {
+	description: string;
+	education: {
+		name: string;
+		description: string;
+		period: string;
+		url?: string;
+	}[];
+	githubActivity: boolean;
+};
+
 export type LicenseConfig = {
 	enable: boolean;
 	name: string;

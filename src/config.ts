@@ -1,5 +1,6 @@
 import type {
 	ExpressiveCodeConfig,
+	HomeConfig,
 	LicenseConfig,
 	NavBarConfig,
 	ProfileConfig,
@@ -56,28 +57,38 @@ export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/head.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "小滴",
 	bio: "认真你就输了",
-   links: [
-       {
-           name: "QQ",
-           icon: "fa6-brands:qq",
-           url: "https://wpa.qq.com/msgrd?v=3&uin=3197564855&site=qq&menu=yes",
-       },
-       {
-           name: "微信",
-           icon: "fa6-brands:weixin",
-           url: "/wechat.png",
-       },
-       {
-           name: "GitHub",
-           icon: "fa6-brands:github",
-           url: "https://github.com/QinchuiD",
-       },
-       {
-           name: "邮箱",
-           icon: "fa6-solid:envelope",
-           url: "mailto:1040724212@stu.jiangnan.edu.cn",
-       },
-   ],
+	links: [
+		{
+			name: "QQ",
+			icon: "fa6-brands:qq",
+			url: "https://wpa.qq.com/msgrd?v=3&uin=3197564855&site=qq&menu=yes",
+		},
+		{
+			name: "微信",
+			icon: "fa6-brands:weixin",
+			url: "/wechat.png",
+		},
+		{
+			name: "GitHub",
+			icon: "fa6-brands:github",
+			url: "https://github.com/QinchuiD",
+		},
+		{
+			name: "邮箱",
+			icon: "fa6-solid:envelope",
+			url: "mailto:1040724212@stu.jiangnan.edu.cn",
+		},
+	],
+};
+
+export const homeConfig: HomeConfig = {
+	description:
+		"欢迎来到我的个人博客。在这里记录学习、技术与生活，分享遇到的问题和新的思考。",
+	// 填入教育经历后，首页会自动显示这一栏。
+	// 示例：{ name: "学校名称", description: "专业或研究方向", period: "2022 — 2026" }
+	education: [],
+	// 自动读取上方 GitHub 个人主页对应账号的公开贡献记录。
+	githubActivity: true,
 };
 
 export const licenseConfig: LicenseConfig = {
